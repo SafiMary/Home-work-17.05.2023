@@ -7,10 +7,45 @@ using System.Threading.Tasks;
 
 namespace Home_work_17._05._2023
 {
-    
+
     internal class Program
     {
-     
+        
+        static string[] readFileToArray(string filename)
+        {
+            try
+            {
+                // Открыли, прочитали, закрыли
+                var sr = new StreamReader(filename);
+                string buffer = sr.ReadToEnd();
+                sr.Close();
+                // разбираем, посредством Split на слова.
+                
+                var _arr = buffer.Split(' ', '\n', '\r'/*, '.',','*/);
+                return _arr;
+            }
+            catch
+            {
+                Console.WriteLine($"Не удалось прочитать файл {filename}");
+                string[] _arr = new string[] { };
+                return _arr;
+            }
+        }
+        static void writeToFile(string filename, string _text, bool append = true)
+        {
+            try
+            {
+                // Используя конструкцию using, автоматически закрываем поток для записи
+                using (var sw = new StreamWriter(filename, append))
+                {
+                    sw.WriteLine(_text);
+                }
+            }
+            catch
+            {
+                Console.WriteLine($"Не удалось записать в файл {filename}");
+            }
+        }
         static void Main(string[] args)
         {
             string path1 = "text1.txt";
@@ -27,18 +62,17 @@ namespace Home_work_17._05._2023
                 Console.WriteLine("аргументы не переданны");
             }
 
-            var streamWriter = new StreamWriter("solution.txt");
-            string[] lines1 = File.ReadAllLines(path1);
-            Console.WriteLine(String.Join(Environment.NewLine, lines1));
-            string[] lines2 = File.ReadAllLines(path2);
-            Console.WriteLine(String.Join(Environment.NewLine, lines2));
-            //string[] lines1 = { "Пиво", "Вино", "Водка", "Вермут" };
-            //string[] lines2 = { "Пиво", "Сок", "Абсент", "Водка" };
-            var result = lines1.Intersect(lines2).ToList();
-            foreach (var s in result) { 
-                streamWriter.WriteLine(s);
+            string[] _arr01 = readFileToArray(path1);
+            string[] _arr02 = readFileToArray(path2);
+            var result = _arr01.Intersect(_arr02);
+            foreach (var item in result)
+            {
+                Console.WriteLine(item);
+                writeToFile("result.txt", item);
             }
-            streamWriter.Close();
+
+
+
         }
     }
 }
