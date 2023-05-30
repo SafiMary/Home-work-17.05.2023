@@ -57,7 +57,7 @@ namespace Home_work_17._05._2023
                 path2 = args[1];
             }
 
-            catch
+            catch     
             {
                 Console.WriteLine("аргументы не переданны");
             }
